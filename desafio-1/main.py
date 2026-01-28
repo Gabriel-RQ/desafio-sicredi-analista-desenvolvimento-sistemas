@@ -1,3 +1,10 @@
+"""
+Autor: Gabriel Radzewicz de Queiroz
+Descrição:
+Automação desenvolvida em Python para coletar informações do site da Cooperativa Sicredi Conexão.
+O script acessa a página https://sicrediconexao.com.br, extrai os dados dos produtos e serviços descritos nas categorias VOCÊ, EMPRESA e AGRONEGÓCIO no menu PRODUTOS, e então os salva em um arquivo CSV estruturado.
+"""
+
 from csv import DictWriter
 from playwright.sync_api import sync_playwright
 from itertools import zip_longest
