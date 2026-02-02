@@ -9,7 +9,7 @@ readonly class MemberRegistrationDTO
     public function __construct(
         public string $cpf,
         public string $name,
-        public string $phone,
+        public ?string $phone,
         public string $email,
         public string $state,
         public string $city,
