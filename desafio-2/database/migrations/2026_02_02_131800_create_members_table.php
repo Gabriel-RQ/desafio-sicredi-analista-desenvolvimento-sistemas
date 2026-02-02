@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone')->nullable();
             $table->string('email');
-            $table->foreignIdFor(Address::class);
+            $table->foreignIdFor(Address::class)->constrained();
             $table->timestamps();
         });
     }
