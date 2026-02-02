@@ -6,11 +6,10 @@ use App\Actions\CreateMemberAction;
 use App\Actions\UpdateMemberAction;
 use App\DTOs\MemberRegistrationDTO;
 use App\DTOs\MemberUpdateDTO;
+use App\Http\Requests\StoreMemberRequest;
+use App\Http\Requests\UpdateMemberRequest;
 use App\Http\Resources\MemberResource;
 use App\Models\Member;
-use App\Rules\Cpf;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Log;
 
 class MemberController extends Controller
@@ -30,17 +29,8 @@ class MemberController extends Controller
     /**
      * Cria um novo associado.
      */
-    public function store(Request $request, CreateMemberAction $action)
+    public function store(StoreMemberRequest $request, CreateMemberAction $action)
     {
-        $request->validate([
-            'cpf' => ['string', 'required', 'min:14', 'max:14', 'unique:members', new Cpf],
-            'name' => 'string|required|max:255',
-            'phone' => 'nullable|string|min:9|max:19',
-            'email' => 'email|required|max:255',
-            'state' => 'string|required|max:255',
-            'city' => 'string|required|max:255',
-        ]);
-
         $dto = MemberRegistrationDTO::fromRequest($request);
 
         $createdMember = $action->execute($dto);
@@ -66,17 +56,8 @@ class MemberController extends Controller
     /**
      * Atualiza os dados do associado especificado.
      */
-    public function update(Request $request, Member $member, UpdateMemberAction $action)
+    public function update(UpdateMemberRequest $request, Member $member, UpdateMemberAction $action)
     {
-        $request->validate([
-            'cpf' => ['sometimes', 'string', 'min:14', 'max:14', Rule::unique('members')->ignore($member->id)],
-            'name' => 'sometimes|string|max:255',
-            'phone' => 'sometimes|nullable|string|min:9|max:19',
-            'email' => 'sometimes|email|max:255',
-            'state' => 'sometimes|string|max:255',
-            'city' => 'sometimes|string|max:255',
-        ]);
-
         $dto = MemberUpdateDTO::fromRequest($request);
 
         $updated = $action->execute($member, $dto);
