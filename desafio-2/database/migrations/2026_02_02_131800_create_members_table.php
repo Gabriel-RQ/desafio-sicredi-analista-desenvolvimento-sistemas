@@ -22,7 +22,7 @@ return new class extends Migration
             $table->id();
             $table->string('cpf')->index();
             $table->string('name');
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->string('email');
             $table->foreignIdFor(Address::class);
             $table->timestamps();
