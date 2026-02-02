@@ -46,6 +46,8 @@ return Application::configure(basePath: dirname(__DIR__))
                     $response['message'] = 'Não autorizado. O token é inválido.';
                 }
 
+                Log::error(get_class($e).' '.$e->getMessage());
+
                 return response()->json($response, $statusCode);
             }
         });

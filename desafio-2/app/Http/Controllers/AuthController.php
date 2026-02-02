@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Log;
 
 class AuthController extends Controller
 {
@@ -17,8 +18,12 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
+            Log::warning('Login não autorizado para usuário '.$credentials['email']);
+
             return response()->json(['message' => 'Não autorizado'], 401);
         }
+
+        Log::info('Realizando login do usuário '.$credentials['email']);
 
         return $this->respondWithToken($token);
     }
@@ -30,6 +35,8 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        Log::info('Realizando logout do usuário '.auth()->user()->email);
+
         auth()->logout();
 
         return response()->json(['message' => 'Logout realizado com sucesso']);
@@ -42,6 +49,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+
         $user = $request->validate(
             [
                 'name' => 'required|string|max:255',
@@ -51,6 +59,7 @@ class AuthController extends Controller
         );
 
         $created = User::create($user);
+        Log::info('Registrando novo usuário '.$created->email);
 
         return response()->json(['message' => 'Usuário cadastrado com sucesso', 'data' => $created], 201);
     }

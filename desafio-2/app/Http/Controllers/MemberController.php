@@ -11,6 +11,7 @@ use App\Models\Member;
 use App\Rules\Cpf;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Log;
 
 class MemberController extends Controller
 {
@@ -19,6 +20,8 @@ class MemberController extends Controller
      */
     public function index()
     {
+        Log::info('Listando todos os associados');
+
         $members = Member::all();
 
         return response()->json(MemberResource::collection($members), 200);
@@ -42,6 +45,8 @@ class MemberController extends Controller
 
         $createdMember = $action->execute($dto);
 
+        Log::info('Registrando novo associado '.$createdMember->name.' com email '.$createdMember->email);
+
         return response()->json([
             'message' => 'Associado cadastrado com sucesso',
             'data' => new MemberResource($createdMember),
@@ -53,6 +58,8 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
+        Log::info('Listando dados do associado ID '.$member->id.' '.$member->name.' com email '.$member->email);
+
         return response()->json(new MemberResource($member), 200);
     }
 
@@ -74,6 +81,8 @@ class MemberController extends Controller
 
         $updated = $action->execute($member, $dto);
 
+        Log::info('Atualizando dados do associado ID '.$updated->id.' '.$updated->name.' com email '.$updated->email);
+
         return response()->json(['message' => 'Associado atualizado com sucesso', 'data' => new MemberResource($updated)], 200);
     }
 
@@ -82,6 +91,8 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
+        Log::info('Excluindo associado de ID '.$member->id);
+
         $member->delete();
 
         return response()->noContent();
