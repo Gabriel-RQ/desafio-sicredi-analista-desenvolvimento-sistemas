@@ -25,7 +25,15 @@ class AuthController extends Controller
 
         Log::info('Realizando login do usuário '.$credentials['email']);
 
-        return $this->respondWithToken($token);
+        return $this->success(
+            [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60,
+            ],
+            'Usuário logado com sucesso',
+            200,
+        );
     }
 
     /**
@@ -39,7 +47,7 @@ class AuthController extends Controller
 
         auth()->logout();
 
-        return response()->json(['message' => 'Logout realizado com sucesso']);
+        return $this->success(null, 'Logout realizado com sucesso', 200);
     }
 
     /**
@@ -61,21 +69,6 @@ class AuthController extends Controller
         $created = User::create($user);
         Log::info('Registrando novo usuário '.$created->email);
 
-        return response()->json(['message' => 'Usuário cadastrado com sucesso', 'data' => $created], 201);
-    }
-
-    /**
-     * Retorna a estrutura da resposta contendo o token.
-     *
-     * @param  string  $token
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-        ]);
+        return $this->success($created, 'Usuário cadastrado com sucesso', 201);
     }
 }

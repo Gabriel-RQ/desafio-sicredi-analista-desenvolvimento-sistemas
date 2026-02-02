@@ -23,7 +23,7 @@ class MemberController extends Controller
 
         $members = Member::all();
 
-        return response()->json(MemberResource::collection($members), 200);
+        return $this->success(MemberResource::collection($members), 'Listagem de associados', 200);
     }
 
     /**
@@ -37,10 +37,7 @@ class MemberController extends Controller
 
         Log::info('Registrando novo associado '.$createdMember->name.' com email '.$createdMember->email);
 
-        return response()->json([
-            'message' => 'Associado cadastrado com sucesso',
-            'data' => new MemberResource($createdMember),
-        ]);
+        return $this->success(new MemberResource($createdMember), 'Associado cadastrado com sucesso', 201);
     }
 
     /**
@@ -50,7 +47,7 @@ class MemberController extends Controller
     {
         Log::info('Listando dados do associado ID '.$member->id.' '.$member->name.' com email '.$member->email);
 
-        return response()->json(new MemberResource($member), 200);
+        return $this->success(new MemberResource($member), 'Dados do associado', 200);
     }
 
     /**
@@ -64,7 +61,7 @@ class MemberController extends Controller
 
         Log::info('Atualizando dados do associado ID '.$updated->id.' '.$updated->name.' com email '.$updated->email);
 
-        return response()->json(['message' => 'Associado atualizado com sucesso', 'data' => new MemberResource($updated)], 200);
+        return $this->success(new MemberResource($updated), 'Associado atualizado com sucesso', 200);
     }
 
     /**
