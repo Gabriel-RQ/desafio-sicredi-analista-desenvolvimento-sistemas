@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Request;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
     /**
-     * Get a JWT via given credentials.
+     * Obtém um token JWT a través das credenciais informadas.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -17,14 +17,14 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Não autorizado'], 401);
         }
 
         return $this->respondWithToken($token);
     }
 
     /**
-     * Log the user out (Invalidate the token).
+     * Realiza o logout do usuário (invalidando o token JWT).
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -32,11 +32,11 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'Logout realizado com sucesso']);
     }
 
     /**
-     * Register a new user for authentication.
+     * Registra um novo usuário para autenticação na API.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -50,13 +50,13 @@ class AuthController extends Controller
             ]
         );
 
-        User::create($user);
+        $created = User::create($user);
 
-        return response()->json(['message' => 'Usuário cadastrado com sucesso'], 201);
+        return response()->json(['message' => 'Usuário cadastrado com sucesso', 'data' => $created], 201);
     }
 
     /**
-     * Get the token array structure.
+     * Retorna a estrutura da resposta contendo o token.
      *
      * @param  string  $token
      * @return \Illuminate\Http\JsonResponse
