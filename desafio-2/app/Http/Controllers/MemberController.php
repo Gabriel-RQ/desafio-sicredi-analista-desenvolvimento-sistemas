@@ -35,7 +35,7 @@ class MemberController extends Controller
 
         $createdMember = $action->execute($dto);
 
-        Log::info('Registrando novo associado '.$createdMember->name.' com email '.$createdMember->email);
+        Log::info('Registrando novo associado {name} com email {email}', ['name' => $createdMember->name, 'email' => $createdMember->email]);
 
         return $this->success(new MemberResource($createdMember), 'Associado cadastrado com sucesso', 201);
     }
@@ -45,7 +45,7 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        Log::info('Listando dados do associado ID '.$member->id.' '.$member->name.' com email '.$member->email);
+        Log::info('Listando dados do associado ID {id}', ['id' => $member->id]);
 
         return $this->success(new MemberResource($member), 'Dados do associado', 200);
     }
@@ -59,7 +59,7 @@ class MemberController extends Controller
 
         $updated = $action->execute($member, $dto);
 
-        Log::info('Atualizando dados do associado ID '.$updated->id.' '.$updated->name.' com email '.$updated->email);
+        Log::info('Atualizando dados do associado ID {id}', ['id' => $updated->id]);
 
         return $this->success(new MemberResource($updated), 'Associado atualizado com sucesso', 200);
     }
@@ -69,7 +69,7 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
-        Log::info('Excluindo associado de ID '.$member->id);
+        Log::info('Excluindo associado de ID {id}', ['id' => $member->id]);
 
         $member->delete();
 
