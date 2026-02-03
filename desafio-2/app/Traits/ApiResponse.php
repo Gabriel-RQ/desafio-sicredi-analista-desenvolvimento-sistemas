@@ -14,11 +14,11 @@ trait ApiResponse
      */
     protected function success($data = null, ?string $message = null, int $code = 200): JsonResponse
     {
-        return response()->json([
+        return response()->json(array_filter([
             'success' => true,
             'message' => $message,
             'data' => $data,
-        ], $code);
+        ]), $code);
     }
 
     /**
