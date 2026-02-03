@@ -45,3 +45,16 @@ function something()
 {
     // ..
 }
+
+function authenticate(?App\Models\User $user = null)
+{
+    // Cria o usuário se não for passado um
+    $user = $user ?? App\Models\User::factory()->create();
+
+    // Gera o token JWT usando o guard padrão (ou 'api' se configurado)
+    $token = auth()->login($user);
+
+    // Retorna o próprio teste ($this) configurado com o token
+    // Isso permite encadear: authenticate()->getJson(...)
+    return test()->withToken($token);
+}
