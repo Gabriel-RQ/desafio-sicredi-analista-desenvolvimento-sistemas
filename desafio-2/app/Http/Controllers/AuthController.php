@@ -6,15 +6,24 @@ use App\Exceptions\UserLoginException;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Dedoc\Scramble\Attributes\Group;
+use Dedoc\Scramble\Attributes\Response;
 use Log;
 
+#[Group('Autenticação')]
 class AuthController extends Controller
 {
     /**
-     * Obtém um token JWT a través das credenciais informadas.
+     * Realiza o login do usuário
+     *
+     * Obtém um token JWT através das credenciais informadas.
+     *
+     * @unauthenticated
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    #[Response(200, 'Autenticação bem sucedida', type: 'array{success: bool, message: string, data: array{access_token: string, token_type: string, expires_in: int}}')]
+    #[Response(422, 'Erro de validação', type: 'array{success: bool, message: string, errors: array{property: string[]}}')]
     public function login(LoginRequest $request)
     {
         $credentials = $request->only(['email', 'password']);
@@ -39,9 +48,11 @@ class AuthController extends Controller
     }
 
     /**
-     * Realiza o logout do usuário (invalidando o token JWT).
+     * Realiza o logout do usuário
      *
-     * @return \Illuminate\Http\JsonResponse
+     * Invalida o token JWT.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function logout()
     {
@@ -49,14 +60,18 @@ class AuthController extends Controller
 
         auth()->logout();
 
-        return $this->success(null, 'Logout realizado com sucesso', 200);
+        return response()->noContent();
     }
 
     /**
      * Registra um novo usuário para autenticação na API.
      *
+     * @unauthenticated
+     *
      * @return \Illuminate\Http\JsonResponse
      */
+    #[Response(201, 'Usuário cadastrado', type: 'array{success: bool, message: string, data: User}')]
+    #[Response(422, 'Erro de validação', type: 'array{success: bool, message: string, errors: array{property: string[]}}')]
     public function register(RegisterRequest $request)
     {
 
