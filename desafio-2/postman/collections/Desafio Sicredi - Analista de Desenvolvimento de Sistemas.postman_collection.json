@@ -1,0 +1,544 @@
+{
+  "info": {
+    "_postman_id": "bc09d998-daea-4a03-a6a0-5e81a13de07e",
+    "name": "Desafio Sicredi - Analista de Desenvolvimento de Sistemas",
+    "description": "# Desafio Sicredi - Analista de Desenvolvimento de Sistemas\n\nAPI para solução do **Desafio 2: Backend** proposto para a vaga de Analista de Desenvolvimento de Sistemas no Sicredi Conexão.\n\nA API conta com:\n\n- Autenticação JWT (login e logout)\n    \n- Conexão com base de dados relacional\n    \n- Registro de usuários\n    \n- CRUD de associado\n    \n- Documentação OpenAPI/Swagger",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Autenticação",
+      "item": [
+        {
+          "name": "Registrar usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "013d66df-5d61-47d6-b6f8-0db6e2074fef",
+                "exec": [
+                  "// Save the email from the request body to use in the login request",
+                  "if (pm.response.code === 201) {",
+                  "    const requestBody = JSON.parse(pm.request.body.raw);",
+                  "    pm.collectionVariables.set(\"userEmail\", requestBody.email);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "1c3b03e0-4b77-4a74-bb39-536144fa94d5",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "199bbab5-8879-4bbb-b201-e6dfcc3d6913",
+                "exec": [
+                  "// Parse the response",
+                  "const jsonData = pm.response.json();",
+                  "",
+                  "// Extract the token from access_token attribute",
+                  "if (jsonData.data.access_token) {",
+                  "    pm.collectionVariables.set(\"jwtToken\", jsonData.data.access_token);",
+                  "    console.log(\"JWT token saved successfully\");",
+                  "} else {",
+                  "    console.log(\"Token not found in response\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "e7def0f7-1d81-4b4e-bedc-783d03c3d045",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"123456\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "id": "33c6167c-3cd2-4aad-867e-13ee63b3637b",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "498b5a25-79b8-46a2-abf7-39779f0bb2bb",
+      "description": "Rotas relacionadas a autenticação da API, por meio de tokens JWT."
+    },
+    {
+      "name": "Associados",
+      "item": [
+        {
+          "name": "Criar associado",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "29c41820-347a-44b6-98eb-5edc468f7ab6",
+                "exec": [
+                  "// Generate random Brazilian state name",
+                  "const brazilianStates = [\"Acre\", \"Alagoas\", \"Amapá\", \"Amazonas\", \"Bahia\", \"Ceará\", \"Distrito Federal\", \"Espírito Santo\", \"Goiás\", \"Maranhão\", \"Mato Grosso\", \"Mato Grosso do Sul\", \"Minas Gerais\", \"Pará\", \"Paraíba\", \"Paraná\", \"Pernambuco\", \"Piauí\", \"Rio de Janeiro\", \"Rio Grande do Norte\", \"Rio Grande do Sul\", \"Rondônia\", \"Roraima\", \"Santa Catarina\", \"São Paulo\", \"Sergipe\", \"Tocantins\"];",
+                  "const randomState = brazilianStates[Math.floor(Math.random() * brazilianStates.length)];",
+                  "pm.variables.set(\"randomBrazilianState\", randomState);",
+                  "",
+                  "// Generate valid Brazilian CPF with proper check digit validation",
+                  "function generateValidCPF() {",
+                  "    // Generate 9 random digits, avoiding invalid sequences",
+                  "    let digits = [];",
+                  "    let isInvalid = true;",
+                  "    ",
+                  "    while (isInvalid) {",
+                  "        digits = [];",
+                  "        for (let i = 0; i < 9; i++) {",
+                  "            digits.push(Math.floor(Math.random() * 10));",
+                  "        }",
+                  "        // Check if all digits are the same (invalid CPF)",
+                  "        isInvalid = digits.every(d => d === digits[0]);",
+                  "    }",
+                  "    ",
+                  "    // Calculate first check digit",
+                  "    let sum = 0;",
+                  "    for (let i = 0; i < 9; i++) {",
+                  "        sum += digits[i] * (10 - i);",
+                  "    }",
+                  "    let remainder = sum % 11;",
+                  "    const firstCheckDigit = remainder < 2 ? 0 : 11 - remainder;",
+                  "    digits.push(firstCheckDigit);",
+                  "    ",
+                  "    // Calculate second check digit",
+                  "    sum = 0;",
+                  "    for (let i = 0; i < 10; i++) {",
+                  "        sum += digits[i] * (11 - i);",
+                  "    }",
+                  "    remainder = sum % 11;",
+                  "    const secondCheckDigit = remainder < 2 ? 0 : 11 - remainder;",
+                  "    digits.push(secondCheckDigit);",
+                  "    ",
+                  "    // Format as ddd.ddd.ddd-dd",
+                  "    const cpf = `${digits.slice(0, 3).join('')}.${digits.slice(3, 6).join('')}.${digits.slice(6, 9).join('')}-${digits.slice(9, 11).join('')}`;",
+                  "    return cpf;",
+                  "}",
+                  "",
+                  "const cpf = generateValidCPF();",
+                  "pm.variables.set(\"randomCPF\", cpf);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "866178a9-4d37-4098-b938-9fe1c27d2d19",
+                "exec": [
+                  "const jsonData = pm.response.json();\r",
+                  "if (jsonData.data.id) {\r",
+                  "    pm.collectionVariables.set(\"lastCreatedMemberId\", jsonData.data.id);\r",
+                  "}\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "3fb5cef6-f063-42ff-86eb-82053b8a1a4b",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"cpf\": \"{{randomCPF}}\",\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"phone\": \"{{$randomPhoneNumber}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"state\": \"{{randomBrazilianState}}\",\r\n    \"city\": \"{{$randomCity}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/members",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "members"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar todos os associados",
+          "id": "c0562e72-c4a2-401e-a4da-6482d5fd73fe",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/members",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "members"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar associado específico",
+          "id": "7715d3ac-8bf6-4f91-90dc-3ab0aaff7d8b",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/members/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "members",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{lastCreatedMemberId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar associado",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "626eaf2d-384e-49c4-9a78-e27325d62022",
+                "exec": [
+                  "// Generate valid Brazilian CPF with proper check digit validation\r",
+                  "function generateValidCPF() {\r",
+                  "    // Generate 9 random digits, avoiding invalid sequences\r",
+                  "    let digits = [];\r",
+                  "    let isInvalid = true;\r",
+                  "    \r",
+                  "    while (isInvalid) {\r",
+                  "        digits = [];\r",
+                  "        for (let i = 0; i < 9; i++) {\r",
+                  "            digits.push(Math.floor(Math.random() * 10));\r",
+                  "        }\r",
+                  "        // Check if all digits are the same (invalid CPF)\r",
+                  "        isInvalid = digits.every(d => d === digits[0]);\r",
+                  "    }\r",
+                  "    \r",
+                  "    // Calculate first check digit\r",
+                  "    let sum = 0;\r",
+                  "    for (let i = 0; i < 9; i++) {\r",
+                  "        sum += digits[i] * (10 - i);\r",
+                  "    }\r",
+                  "    let remainder = sum % 11;\r",
+                  "    const firstCheckDigit = remainder < 2 ? 0 : 11 - remainder;\r",
+                  "    digits.push(firstCheckDigit);\r",
+                  "    \r",
+                  "    // Calculate second check digit\r",
+                  "    sum = 0;\r",
+                  "    for (let i = 0; i < 10; i++) {\r",
+                  "        sum += digits[i] * (11 - i);\r",
+                  "    }\r",
+                  "    remainder = sum % 11;\r",
+                  "    const secondCheckDigit = remainder < 2 ? 0 : 11 - remainder;\r",
+                  "    digits.push(secondCheckDigit);\r",
+                  "    \r",
+                  "    // Format as ddd.ddd.ddd-dd\r",
+                  "    const cpf = `${digits.slice(0, 3).join('')}.${digits.slice(3, 6).join('')}.${digits.slice(6, 9).join('')}-${digits.slice(9, 11).join('')}`;\r",
+                  "    return cpf;\r",
+                  "}\r",
+                  "\r",
+                  "const cpf = generateValidCPF();\r",
+                  "pm.variables.set(\"randomCPF\", cpf);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "ad2692ef-b66f-44e2-8e0c-05c549eaf64a",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"cpf\": \"{{randomCPF}}\",\r\n    \"name\": \"Associado Atualizado\",\r\n    \"phone\": \"{{$randomPhoneNumber}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"state\": \"Rio Grande do Sul\",\r\n    \"city\": \"Frederico Westphalen\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/members/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "members",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{lastCreatedMemberId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar associado",
+          "id": "40687cdd-4bf7-4adb-aa7e-2465e0a41582",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"phone\": \"{{$randomPhoneNumber}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"state\": \"Rio Grande do Sul\",\r\n    \"city\": \"Frederico Westphalen\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/members/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "members",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{lastCreatedMemberId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Apagar associado",
+          "id": "40eb4c45-b547-40ae-8dc5-f5f155adab33",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/members/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "members",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{lastCreatedMemberId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "a9086094-a303-4704-88a2-41a9e8b54ad6",
+      "description": "Rotas relacionadas ao CRUD de associados."
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwtToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "id": "35486a63-03fb-4ec4-b5bd-dd63cfcfee2d",
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    },
+    {
+      "id": "7cbd0ee0-5e6f-42e7-93c1-484a8667654d",
+      "key": "userEmail",
+      "value": ""
+    },
+    {
+      "id": "981084eb-ecc1-4dbc-baf4-8266029ecae9",
+      "key": "jwtToken",
+      "value": ""
+    },
+    {
+      "id": "76b4e6c4-c4e3-4c27-b472-01fbbb8385c5",
+      "key": "lastCreatedMemberId",
+      "value": ""
+    }
+  ]
+}
