@@ -22,8 +22,8 @@ readonly class MemberUpdateDTO
             name: $request->name,
             phone: $request->phone,
             email: $request->email,
-            state: $request->state ? ucfirst(strtolower(trim($request->state))) : null,
-            city: $request->city ? ucfirst(strtolower(trim($request->city))) : null,
+            state: $request->state ? ucwords(strtolower(trim($request->state))) : null,
+            city: $request->city ? ucwords(strtolower(trim($request->city))) : null,
         );
     }
 

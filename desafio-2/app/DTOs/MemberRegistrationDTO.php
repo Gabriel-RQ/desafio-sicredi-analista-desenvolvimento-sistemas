@@ -25,8 +25,8 @@ readonly class MemberRegistrationDTO
             $request->name,
             $request->phone,
             $request->email,
-            ucfirst(strtolower(trim($request->state))),
-            ucfirst(strtolower(trim($request->city))),
+            ucwords(strtolower(trim($request->state))),
+            ucwords(strtolower(trim($request->city))),
         );
     }
 }
