@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UserLoginException;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Log;
 
 class AuthController extends Controller
@@ -13,17 +15,17 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(LoginRequest $request)
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->only(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            Log::warning('Login não autorizado para usuário '.$credentials['email']);
+            Log::warning('Login não autorizado para usuário {email}', ['email' => $credentials['email']]);
 
-            return response()->json(['message' => 'Não autorizado'], 401);
+            throw new UserLoginException;
         }
 
-        Log::info('Realizando login do usuário '.$credentials['email']);
+        Log::info('Realizando login do usuário {email}', ['email' => $credentials['email']]);
 
         return $this->success(
             [
@@ -43,7 +45,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        Log::info('Realizando logout do usuário '.auth()->user()->email);
+        Log::info('Realizando logout do usuário {email}', ['email' => auth()->user()->email]);
 
         auth()->logout();
 
@@ -55,19 +57,13 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
 
-        $user = $request->validate(
-            [
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|string|max:255',
-                'password' => 'required|string|min:6',
-            ]
-        );
+        $user = $request->only(['name', 'email', 'password']);
 
         $created = User::create($user);
-        Log::info('Registrando novo usuário '.$created->email);
+        Log::info('Registrando novo usuário ID {id} {email}', ['id' => $created->id, 'email' => $created->email]);
 
         return $this->success($created, 'Usuário cadastrado com sucesso', 201);
     }
