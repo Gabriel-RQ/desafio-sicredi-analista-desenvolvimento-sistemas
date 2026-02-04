@@ -183,6 +183,12 @@ docker compose up --build
 
 Com os serviços rodando, basta [testar a api](#testar-a-api).
 
+Posteriormente, para parar a execução dos serviços e remover os containers, imagens e volumes criados, basta executar:
+
+```bash
+docker compose down --rmi all --volumes
+```
+
 ## Testar a API
 
 A API pode ser testada a partir de qualquer cliente HTTP de maneira simples, enviando requisições para as rotas descritas [acima](#rotas).
