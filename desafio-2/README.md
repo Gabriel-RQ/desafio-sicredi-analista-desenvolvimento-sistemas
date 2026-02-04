@@ -89,6 +89,14 @@ Além de Laravel, o código também possui as seguintes dependências:
 
 Considerar a execução de todos os comandos abaixo a partir da pasta do [projeto](./).
 
+Para preparar o ambiente de maneira simples, execute o comando abaixo:
+
+```bash
+composer setup
+```
+
+Se tudo funcionar corretamente, pode-se pular para a [execução da api](#4-executando-a-api). Caso contrário, os passos [1](#1-instalando-dependências), [2](#2-preparando-o-ambiente) e [3](#3-base-de-dados) abaixo guiam a preparação manual do ambiente.
+
 ### 1. Instalando dependências
 
 Utilizar o comando abaixo para instalar as dependências do projeto:
@@ -142,6 +150,12 @@ Com o ambiente preparado, basta executar o servidor da API com o comando:
 
 ```bash
 php artisan serve
+```
+
+ou
+
+```bash
+composer dev
 ```
 
 Caso o servidor não consiga rodar em nenhuma porta, o comando abaixo deve resolver:
