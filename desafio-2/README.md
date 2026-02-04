@@ -38,6 +38,44 @@ GET /docs/api
 GET /docs/api.json
 ```
 
+### Modelos
+
+Abaixo os modelos esperados para as requisições:
+
+`POST /api/auth/register`
+```json
+{
+    "name": "string",
+    "email": "string",
+    "password": "string"
+}
+```
+
+`POST /api/auth/login`
+```json
+{
+    "email": "string",
+    "password": "string"
+}
+```
+
+`POST /api/members`
+`PUT /api/members/{id}`
+`PATCH /api/members/{id}`
+```json
+{
+    "cpf": "string",
+    "name": "string",
+    "phone": "string",
+    "email": "string",
+    "state": "string",
+    "city": "string"
+}
+```
+
+
+Os modelos esperados para cada requisição e resposta também podem ser conferidos a partir das rotas de [documentação](#documentação) e da [coleção do postman](./postman/).
+
 ## Dependências
 
 O código foi desenvolvido e testado com **PHP 8.4.16** e **Laravel 12**, ambos instalados e configurados utilizando [Laravel Herd](https://herd.laravel.com).
@@ -121,6 +159,14 @@ A API pode ser testada a partir de qualquer cliente HTTP de maneira simples, env
 
 Apesar disso, recomenda-se o uso do [Postman](https://www.postman.com), para o qual existe uma coleção pronta em [postman/](./postman/). A coleção pode ser importada pela interface do Postman, e traz exemplos de requisições para todas as rotas, com o fluxo de autenticação já configurado.
 
+### Testes unitários e de integração
+
+A API conta com uma cobertura de testes unitários e de integração para garantir robustez e corretude. Os testes podem ser executados com o comando abaixo:
+
+```bash
+php artisan test
+```
+
 ## Documentação
 
-A API é documentada com a especificação OpenAPI. Para acessar a documentação interativa na web, basta acessar o endereço: `http://localhost:8000/docs/api`. A especificação OpenAPI em formato JSON pode ser acessada em `http://localhost:8000/docs/api.json`
+A API é documentada com a especificação OpenAPI. Para acessar a documentação interativa na web, basta [executar o servidor da API](#como-executar) e acessar o endereço: `http://localhost:8000/docs/api`. A especificação OpenAPI em formato JSON pode ser acessada em `http://localhost:8000/docs/api.json`
