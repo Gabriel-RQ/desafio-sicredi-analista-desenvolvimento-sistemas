@@ -204,3 +204,9 @@ composer test
 ## Documentação
 
 A API é documentada com a especificação OpenAPI. Para acessar a documentação interativa na web, basta [executar o servidor da API](#como-executar) e acessar o endereço: `http://localhost:8000/docs/api`. A especificação OpenAPI em formato JSON pode ser acessada em `http://localhost:8000/docs/api.json`
+
+### Base de dados
+
+A base de dados é modelada conforme o diagrama abaixo.
+
+[![](https://mermaid.ink/img/pako:eNqtU01PwzAM_SuVz1XVpV8hVxCXCYkzqjSFxmsjLUmVpMDY-t_J2o0BQwIkfLKfYz_7ydlBYwQCA7Q3kreWq1pHwQaH1kW7OTiY1B5btJEU0f3yDD9x23TcRporvERRcbm5hHvu3LOx4pwR3KOXCqPGYnDFivtvkkMvPiXHWs8OF8Kic_iXiZ0PvS7hRvrtl-4K1ePf1Gj69W8l6jujf1buxHdcdBV4b5f_Jt9pwXGfJPv9BzVZVMOZsgaIobVSAFvzjcMYFNowZ4hh0qYG32FYEg51Atd82Pgaaj2Gup7rB2MUMG-HUGnN0HanYB7seH_vL1ALtNdm0B7YgqRTC2A7eAlhVSZFXhQpKa8WFcnyKoYtMLIok5TSrCxIRkhepfkYw-vEmiZlnpU0L2lGK0pJQWNAIb2xd_P9T99gfANbX-7Z?type=png)](https://mermaid.live/edit#pako:eNqtU01PwzAM_SuVz1XVpV8hVxCXCYkzqjSFxmsjLUmVpMDY-t_J2o0BQwIkfLKfYz_7ydlBYwQCA7Q3kreWq1pHwQaH1kW7OTiY1B5btJEU0f3yDD9x23TcRporvERRcbm5hHvu3LOx4pwR3KOXCqPGYnDFivtvkkMvPiXHWs8OF8Kic_iXiZ0PvS7hRvrtl-4K1ePf1Gj69W8l6jujf1buxHdcdBV4b5f_Jt9pwXGfJPv9BzVZVMOZsgaIobVSAFvzjcMYFNowZ4hh0qYG32FYEg51Atd82Pgaaj2Gup7rB2MUMG-HUGnN0HanYB7seH_vL1ALtNdm0B7YgqRTC2A7eAlhVSZFXhQpKa8WFcnyKoYtMLIok5TSrCxIRkhepfkYw-vEmiZlnpU0L2lGK0pJQWNAIb2xd_P9T99gfANbX-7Z)
