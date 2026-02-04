@@ -38,6 +38,8 @@ GET /docs/api
 GET /docs/api.json
 ```
 
+Obs: Logs de todas as operações são salvos em [storage/logs/laravel.log](./storage/logs/laravel.log)
+
 ### Modelos
 
 Abaixo os modelos esperados para as requisições:
