@@ -1,0 +1,39 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-desafio-sicredi
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "php artisan migrate --force &&
+             php artisan serve --host=0.0.0.0 --port=8000"
+    networks:
+      - sicredi-network
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-desafio-sicredi
+    restart: always
+    environment:
+      MYSQL_DATABASE: sicredi_api_db
+      MYSQL_USER: sicredi_user
+      MYSQL_PASSWORD: sicredi_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    networks:
+      - sicredi-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+networks:
+  sicredi-network:
+    driver: bridge
