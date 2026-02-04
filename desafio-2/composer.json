@@ -1,11 +1,12 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "gabriel-rq/desafio-2-sicredi",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Solução para o Desafio de Backend para vaga de Analista de Desenvolvimento de Sistemas no Sicredi Conexão",
     "keywords": [
         "laravel",
-        "framework"
+        "api",
+        "sicredi"
     ],
     "license": "MIT",
     "require": {
@@ -45,13 +46,9 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
             "@php artisan migrate --force",
-            "npm install",
-            "npm run build"
+            "@php artisan jwt:key"
         ],
-        "dev": [
-            "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names='server,queue,vite'"
-        ],
+        "dev": "php artisan serve",
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
