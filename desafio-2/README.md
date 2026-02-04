@@ -85,9 +85,9 @@ Além de Laravel, o código também possui as seguintes dependências:
 - [laravel-pt-BR-localization](https://github.com/lucascudo/laravel-pt-BR-localization): pacote para localização das mensagens do laravel em português.
 - [Scramble](https://github.com/dedoc/scramble): gerador de documentação OpenAPI.
 
-## Como executar
+## Como executar (Localmente)
 
-Considerar a execução de todos os comandos abaixo a partir da pasta do [projeto](./).
+Considerar a execução de todos os comandos abaixo a partir da pasta do projeto como raíz ([desafio-2](./)).
 
 Para preparar o ambiente de maneira simples, execute o comando abaixo:
 
@@ -141,7 +141,7 @@ Obs: A base de dados deve ser criada no servidor MySQL previamente.
 Com a base de dados configurada (SQLite, MySQL, etc...), executar o seguinte comando para gerar o schema:
 
 ```bash
-php artisan migrate:fresh
+php artisan migrate:fresh --force
 ```
 
 ### 4. Executando a API
@@ -166,6 +166,20 @@ php -d variables_order=GPCS artisan serve
 
 O servidor será executado por padrão em `http://localhost:8000`.
 
+
+## Como executar (Docker):
+
+Considerar a execução de todos os comandos abaixo a partir da pasta do projeto como raíz ([desafio-2](./))
+
+O repositório contêm os arquivos [Dockerfile](./Dockerfile) e [docker-compose](./docker-compose.yml), permitindo a execução da API em ambiente de containers com [Docker](https://www.docker.com). A versão da API executada em container utiliza uma base de dados MySQL. 
+
+Para executar a orquestração dos serviços da API e da base de dados MySQL em containers, execute o seguinte comando:
+
+```bash
+docker compose up --build
+```
+
+Com os serviços rodando, basta [testar a api](#testar-a-api).
 
 ## Testar a API
 
