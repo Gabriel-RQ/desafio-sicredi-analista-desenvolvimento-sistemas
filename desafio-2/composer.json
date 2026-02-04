@@ -45,8 +45,14 @@
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
-            "@php artisan migrate --force",
-            "@php artisan jwt:key"
+            "@php artisan migrate:fresh --force",
+            "@php artisan jwt:secret --force"
+        ],
+        "setup-docker": [
+            "composer install",
+            "@php -r \"copy('.env.docker', '.env');\"",
+            "@php artisan key:generate",
+            "@php artisan jwt:secret --force"
         ],
         "dev": "php artisan serve",
         "test": [
